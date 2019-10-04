@@ -11,10 +11,13 @@ class ArcticMapLayer extends React.Component {
     constructor(props) {
         super(props);
 
+
+
         this.state = {
             map: props.map,
             view: props.view,
-            graphic: null
+            graphic: null,
+            blockSelect : props.blockIdentSelect !== undefined,
         };
     }
 
@@ -79,8 +82,16 @@ class ArcticMapLayer extends React.Component {
 
             if (self.props.type === "dynamic") {
 
+                var trans = 1;
+                if(self.props.transparency){
+                    trans = Number.parseFloat( self.props.transparency) ;
+                }
+                
+
                 var maplayer = new MapImageLayer({
-                    url: self.props.src
+                    url: self.props.src,
+                    opacity : trans,
+
                 });
                 maplayer.when(() => {
                  
@@ -98,7 +109,7 @@ class ArcticMapLayer extends React.Component {
                     self.params.layerOption = "visible";
                     self.params.width = self.state.view.width;
                     self.params.height = self.state.view.height;
-                    self.params.returnGeometry = true;
+                    self.params.returnGeometry = !this.state.blockSelect;
 
                     //  console.log(self.params);
 
@@ -106,6 +117,7 @@ class ArcticMapLayer extends React.Component {
 
                 self.layerRef = maplayer;
                 self.state.map.add(maplayer);
+                
             }
 
 

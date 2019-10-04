@@ -156,7 +156,7 @@ class ArcticMap extends React.Component {
     ]) => {
 
 
-
+window._map = this;
 
       var layerList = new LayerList({
         view: self.state.view,
@@ -224,6 +224,7 @@ class ArcticMap extends React.Component {
 
           var identLayers = self.layers.filter(layer => {
             var mapzoom = view.zoom;
+            console.log("Filter layers")
 
             if (layer.props.identMaxZoom !== undefined) {
               if (Number.parseInt(layer.props.identMaxZoom) > mapzoom
@@ -231,6 +232,12 @@ class ArcticMap extends React.Component {
                 return layer;
               }
             }
+            // else if(layer.props.identMinZoom !== undefined){
+            //   if (Number.parseInt(layer.props.identMinZoom) > mapzoom
+            //   ) {
+            //     return layer;
+            //   }
+            // }
             else {
               return layer;
             }

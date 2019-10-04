@@ -285,6 +285,8 @@ var ArcticMap$1 = function (_React$Component) {
             Locator = _ref2[6],
             geometryEngine = _ref2[7];
 
+        window._map = _this2;
+
         var layerList = new LayerList({
           view: self.state.view,
           listItemCreatedFunction: function listItemCreatedFunction(event) {
@@ -348,14 +350,22 @@ var ArcticMap$1 = function (_React$Component) {
 
             var identLayers = self.layers.filter(function (layer) {
               var mapzoom = view.zoom;
+              console.log("Filter layers");
 
               if (layer.props.identMaxZoom !== undefined) {
                 if (Number.parseInt(layer.props.identMaxZoom) > mapzoom) {
                   return layer;
                 }
-              } else {
-                return layer;
               }
+              // else if(layer.props.identMinZoom !== undefined){
+              //   if (Number.parseInt(layer.props.identMinZoom) > mapzoom
+              //   ) {
+              //     return layer;
+              //   }
+              // }
+              else {
+                  return layer;
+                }
             });
             async.eachSeries(identLayers, function (layer, cb) {
               layer.identify(event, function (results) {
@@ -905,7 +915,8 @@ var ArcticMapLayer = function (_React$Component) {
         _this.state = {
             map: props.map,
             view: props.view,
-            graphic: null
+            graphic: null,
+            blockSelect: props.blockIdentSelect !== undefined
         };
         return _this;
     }
@@ -963,8 +974,15 @@ var ArcticMapLayer = function (_React$Component) {
 
                 if (self.props.type === "dynamic") {
 
+                    var trans = 1;
+                    if (self.props.transparency) {
+                        trans = Number.parseFloat(self.props.transparency);
+                    }
+
                     var maplayer = new MapImageLayer({
-                        url: self.props.src
+                        url: self.props.src,
+                        opacity: trans
+
                     });
                     maplayer.when(function () {
 
@@ -981,7 +999,7 @@ var ArcticMapLayer = function (_React$Component) {
                         self.params.layerOption = "visible";
                         self.params.width = self.state.view.width;
                         self.params.height = self.state.view.height;
-                        self.params.returnGeometry = true;
+                        self.params.returnGeometry = !_this2.state.blockSelect;
 
                         //  console.log(self.params);
                     });

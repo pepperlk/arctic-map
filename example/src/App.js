@@ -147,7 +147,7 @@ export default class App extends Component {
     return (
       <div style={{ width: '100vw', height: '100vh' }}>
         <ArcticMap basemap="topo" search ref={this.am} onmapready={this.mapready.bind(this)}>
-
+        <ArcticMapEdit single polygon onnewfeature={this.onnew} />
           <ArcticMapLayer
             type="geojson"
             template={this.geojsontemplate} onready={this.layerready.bind(this)} />
@@ -161,9 +161,9 @@ export default class App extends Component {
           <ArcticMapLayer
 
             type="dynamic"
-            src="https://gis.test.blm.gov/arcgis/rest/services/Cadastral/BLM_Natl_PLSS_CadNSDI/MapServer" >
+            src="https://gis.blm.gov/arcgis/rest/services/Cadastral/BLM_Natl_PLSS_CadNSDI/MapServer" >
 
-            <ArcticMapLayerPopup layerid="0" popup={(context, all) =>{
+      <ArcticMapLayerPopup layerid="0" popup={(context, all) =>{
              
                 return( <h3>{context.attributes.NAME}</h3>);
             }}>
@@ -175,13 +175,17 @@ export default class App extends Component {
                 return( <h3>{context.attributes["Second Division Identifier"] }</h3>);
             }}>
 
-            </ArcticMapLayerPopup>
+          </ArcticMapLayerPopup> 
 
           </ArcticMapLayer>
 
+         {/*  <ArcticMapLayer transparency=".32" identMaxZoom="30" blockIdentSelect type="dynamic" src="https://gis.blm.gov/arcgis/rest/services/lands/BLM_Natl_SMA_Cached_without_PriUnk/MapServer/" />
 
-          {/* point line square circle  */}
-          <ArcticMapEdit single polygon onnewfeature={this.onnew} />
+          <ArcticMapLayer transparency=".32"  identMaxZoom="1" blockIdentSelect type="dynamic" src="https://gis.blm.gov/arcgis/rest/services/lands/BLM_Natl_SMA_LimitedScale/MapServer/" />
+          
+
+          point line square circle  */}
+          
           <ArcticMapLLDSearch />
 
         </ArcticMap>
